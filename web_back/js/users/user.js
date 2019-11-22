@@ -1,33 +1,22 @@
 //把基础信息提取，当作变量来使用；
 var baseUrl = 'http://localhost:8000/';
 var user = {
-    logout: function() {
+    logout: function(callback) {
         $.post(baseUrl + 'admin/logout', function(res) {
-            if (res.code === 200) {
-                window.location.href = './login.html';
-            }
+            callback(res)
         })
     },
-    login: function(myName, myPassword) {
+    login: function(myName, myPassword, callback) {
         $.post(baseUrl + 'admin/login', {
             user_name: myName,
             password: myPassword
         }, function(res) {
-            console.log(res)
-            if (res.code === 200) {
-                alert('登陆成功');
-                window.location.href = './index.html';
-            } else {
-                alert(res.msg)
-            }
+            callback(res)
         })
     },
-    getInfo: function() {
+    getInfo: function(callback) {
         $.get(baseUrl + 'admin/getuser', function(res) {
-            if (res.code === 200) {
-                $('#userImg').prop('src', res.data.user_pic)
-                $('#userName').text(res.data.nickname)
-            }
+            callback(res)
         })
     }
 }
