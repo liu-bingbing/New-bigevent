@@ -14,7 +14,11 @@ var category = {
         $.post(APIURLS.category_add, { 'name': name, 'slug': slug }, function() {
             callback(res)
         })
-
+    },
+    edit: function(id, name, slug, callback) {
+        $.post(APIURLS.category_edit, { 'id': id, 'name': name, 'slug': slug }, function() {
+            callback(res)
+        })
     }
 
 }
