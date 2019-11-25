@@ -39,12 +39,8 @@
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">文章类别：</label>
                     <div class="col-sm-4">
-                        <select class="form-control">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
+                        <select class="form-control" id="categoryContainer">
+                            
                         </select>
                     </div>
                 </div>
@@ -79,6 +75,24 @@
             </form>
         </div>
     </div>
+    <script src="./js/users/config.js"></script>
+    <script src="./js/users/category.js"></script>
+    <script src="./js/users/template-web.js"></script>
+    {{each data item}}
+    <script id="temp_cate" type="text/html">
+        <option>{{item.name}}</option>
+    </script>
+    {{/each}}
+    <script>
+        category.show(function(res) {
+            console.log(res);
+            var htmlStr = template('temp_cate', res)
+            console.log(htmlStr);
+            $('#categoryContainer').html(htmlStr)
+
+        })
+    </script>
+
 
 </body>
 
