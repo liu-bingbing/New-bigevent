@@ -23,23 +23,26 @@
             写文章
         </div>
         <div class="container-fluid common_con">
-            <form class="form-horizontal article_form">
+            <form class="form-horizontal article_form" id="myform">
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">文章标题：</label>
                     <div class="col-sm-10">
-                        <input type="email" class="form-control" id="inputEmail3" placeholder="文章标题">
+                        <input type="text" name="title" class="form-control" id="inputEmail3" placeholder="文章标题">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputPassword3" class="col-sm-2 control-label">文章封面：</label>
                     <div class="col-sm-10">
-                        <input type="file" id="exampleInputFile">
+                        <input type="file" name="cover" id="exampleInputFile">
+                    </div>
+                    <div>
+                        <img id="previewImg" style="height: 200px;" src="" alt="">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">文章类别：</label>
                     <div class="col-sm-4">
-                        <select class="form-control" id="categoryContainer">
+                        <select class="form-control" name="type" id="categoryContainer">
                             
                         </select>
                     </div>
@@ -49,7 +52,7 @@
                     <div class="col-sm-4">
 
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="YYYY-MM-DD" id="dateinput">
+                            <input type="text" class="form-control" name="date" placeholder="YYYY-MM-DD" id="dateinput">
                             <span class="input-group-btn">
                                 <button class="btn btn-default" type="button"
                                     onclick="jeDate('#dateinput',{trigger:false,format: 'YYYY-MM-DD'})"><i
@@ -68,7 +71,7 @@
                 </div>
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-success">发布</button>
+                        <button type="button" class="btn btn-success" id="btnAdd">发布</button>
                         <button type="submit" class="btn btn-default">存为草稿</button>
                     </div>
                 </div>
@@ -77,19 +80,51 @@
     </div>
     <script src="./js/users/config.js"></script>
     <script src="./js/users/category.js"></script>
+    <script src="./js/users/article.js"></script>
     <script src="./js/users/template-web.js"></script>
-    {{each data item}}
+
     <script id="temp_cate" type="text/html">
-        <option>{{item.name}}</option>
+        {{each data item}}
+        <option value="{{item.id}}">{{item.name}}</option>
+        {{/each}}
     </script>
-    {{/each}}
+
     <script>
         category.show(function(res) {
-            console.log(res);
-            var htmlStr = template('temp_cate', res)
-            console.log(htmlStr);
-            $('#categoryContainer').html(htmlStr)
+            // console.log(res);
+            if (res.code === 200) {
+                var htmlStr = template('temp_cate', res)
+                console.log(htmlStr);
+                $('#categoryContainer').html(htmlStr)
+            }
+        })
+        $('#coverImg').change(function() {
+            console.dir(this);
+            var file = this.files[0];
+            if (file) {
+                var url = URL.createObjectURL(file);
+                console.log(url);
+                $('#previewImg').prop('src', url)
+            }
 
+        })
+
+        $('#btnAdd').click(function() {
+            var fd = new FormData(document.getElementById('myform'));
+            console.log(fd.get('title'));
+            //手动添加一个参数
+            fd.append('state', '已发布')
+                //发请求，调用接口；
+                //在article.js中准备一个添加文章的方法
+            fd.set('content', tinyMCE.activeEditor.getContent())
+            article.add(fd, function(res) {
+                console.log(res);
+                if (res.code === 201) {
+                    alert('添加成功')
+                } else {
+                    alert(res.msg)
+                }
+            })
         })
     </script>
 

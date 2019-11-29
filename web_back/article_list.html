@@ -98,7 +98,7 @@
             <td class="text-center">{{item.state}}</td>
             <td class="text-center">
                 <a href="article_edit.html" class="btn btn-default btn-xs">编辑</a>
-                <a href="javascript:deleteTr( 1005 );" class="btn btn-danger btn-xs">删除</a>
+                <a href="javascript:;" data-id="{{item.id}}" class="btn btn-danger btn-xs del">删除</a>
             </td>
         </tr>
         {{/each}}
@@ -124,6 +124,7 @@
         var curPage = '';
         var type = '';
         var state = '';
+        var curTotalPage = '';
         getAndShow();
 
         function getAndShow() {
@@ -133,7 +134,11 @@
                     var htmlStr = template('temp_table', res)
                         // console.log(htmlStr)
                     $('#articleContainer').html(htmlStr)
-
+                    if (curTotalPage != res.totalPage) {
+                        console.log(curTotalPage, res.totalPage);
+                        $('#pagination').twbsPagination('destroy');
+                        curTotalPage = res.totalPage;
+                    }
                     $('#pagination').twbsPagination({
                         totalPages: res.totalPage, //总页数
                         visiblePages: 7, //浏览页，一次性展示的页数
@@ -156,8 +161,22 @@
             type = $('#selCategory').val()
             state = $('#selStatus').val()
             console.log(type, state);
+            curPage = 1
 
+            getAndShow()
+        })
 
+        $('#articleContainer').on('click', '.del', function() {
+            if (window.confirm('确定要删除吗？') === false) {
+                return;
+            }
+            //文章删除：
+            var id = $(this).attr('data-id')
+            console.log(id);
+            article.del(id, function(res) {
+                console.log(res);
+
+            })
         })
     </script>
 
