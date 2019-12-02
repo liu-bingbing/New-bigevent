@@ -38,5 +38,19 @@ var article = {
             function(res) {
                 callback(res)
             })
+    },
+    //编辑文章：
+    edit: function(fd, callback) {
+        $.ajax({
+            url: APIURLS.article_edit,
+            type: 'post',
+            data: fd,
+            processData: false,
+            contentType: false,
+            success: function(res) {
+                callback(res)
+
+            }
+        })
     }
 }

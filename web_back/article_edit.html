@@ -19,30 +19,30 @@
             文章编辑
         </div>
         <div class="container-fluid common_con">
-            <form class="form-horizontal article_form">
+            <form class="form-horizontal article_form" id="myform">
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">文章标题：</label>
                     <div class="col-sm-10">
-                        <input type="email" class="form-control" id="article_title" value="文章标题文字">
+                        <input type="email" class="form-control" name="title" id="article_title" value="文章标题文字">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputPassword3" class="col-sm-2 control-label">文章封面：</label>
                     <div class="col-sm-10">
                         <img src="images/pic06.jpg" class="article_cover" id="article_cover">
-                        <input type="file" id="exampleInputFile">
+                        <input type="file" id="exampleInputFile" name="cover">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">文章类别：</label>
                     <div class="col-sm-4">
-                        <select class="form-control" id="categoryContainer">
+                        <select class="form-control" id="categoryContainer" name="type">
                             
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-2 control-label">发布时间：</label>
+                    <label for="inputEmail3" name="date" class="col-sm-2 control-label">发布时间：</label>
                     <div class="col-sm-4">
 
                         <div class="input-group">
@@ -63,7 +63,7 @@
                 </div>
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-success">修改</button>
+                        <button type="button" id="btnSave" class="btn btn-success">修改</button>
                     </div>
                 </div>
             </form>
@@ -88,19 +88,30 @@
         var id = location.search.substr(4);
         //  2.根据id去求接口，获取对应文章的详情；
         article.getDetail(id, function(res) {
-                    console.log(res);
-                    $('#article_title').val(res.data.title)
-                    $('#article_cover').prop("src", res.data.cover)
-                    $('#dateinput').val(res.data.date)
-                    $('#rich_content').val(res.data.content)
-                    category.show(function(result) {
-                        var htmlStr = template('temp_cate', result)
-                        console.log(htmlStr);
-                        $('#categoryContainer').html(htmlStr)
-                    })
-                }
-                //  3.显示在表单元素中 ;
-                // 4.用户再修改，保存；
+                console.log(res);
+                $('#article_title').val(res.data.title)
+                $('#article_cover').prop("src", res.data.cover)
+                $('#dateinput').val(res.data.date)
+                $('#rich_content').val(res.data.content)
+                category.show(function(result) {
+                    var htmlStr = template('temp_cate', result)
+                    console.log(htmlStr);
+                    $('#categoryContainer').html(htmlStr)
+                    $('#categoryContainer').val(typeId)
+                })
+            })
+            //  3.显示在表单元素中 ;
+            // 4.用户再修改，保存；
+        $('#btnSave').click(function() {
+            var fd = new FormData(document.getElementById('myform'))
+                //补充一个参数
+            fd.append("id", id)
+                //单独处理富文本编辑器
+            fd.set('content', tinyMCE.activeEditor.getContent())
+            article.edit(fd, function(res) {
+                console.log(res);
+            })
+        })
     </script>
 
 </body>
