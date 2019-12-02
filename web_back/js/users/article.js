@@ -30,6 +30,13 @@ var article = {
 
             }
         })
-
+    },
+    getDetail: function(id, callback) {
+        $.get(APIURLS.article_show, {
+                "id": id
+            },
+            function(res) {
+                callback(res)
+            })
     }
 }
