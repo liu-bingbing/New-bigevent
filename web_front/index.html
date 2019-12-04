@@ -56,9 +56,26 @@
     <div class="main_con clearfix">
         <div class="left_con">
             <ul class="focus_list" id="focus_list">
-                <li class="first">
-
-                </li>
+                <!-- <li class="first">
+                        <a href="#"><img src="images/pic01.jpg" alt=""></a>
+                        <p>图片说明</p>
+                    </li>
+                    <li>
+                        <a href="#"><img src="images/pic02.jpg" alt=""></a>
+                        <p>图片说明图片说明图片说明图片说明图片说明图片说明图片说明图片说明图片说明</p>
+                    </li>
+                    <li>
+                        <a href="#"><img src="images/pic03.jpg" alt=""></a>
+                        <p>图片说明</p>
+                    </li>
+                    <li>
+                        <a href="#"><img src="images/pic05.jpg" alt=""></a>
+                        <p>图片说明</p>
+                    </li>
+                    <li>
+                        <a href="#"><img src="images/pic06.jpg" alt=""></a>
+                        <p>图片说明</p>
+                    </li> -->
             </ul>
 
             <div class="common_title">
@@ -228,21 +245,23 @@
     <script src="./js/article.js"></script>
     <script src="./js/template-web.js"></script>
     <script>
+        // 获取文章类别，并显示
         category.show(function(res) {
-                console.log(res);
-                //用模板引擎来显示数据；
-                var htmlStr = template('temp_cate', res)
-                console.log(htmlStr);
-                $('#left_menu').html(htmlStr)
-                $('#level_two').html('<li class="up"></li>' + htmlStr)
-            })
-            //获取五条新闻：
+            console.log(res);
+            // 模板引擎来 渲染数据
+            var htmlStr = template("temp_cate", res);
+            console.log(htmlStr);
+            $("#left_menu").html(htmlStr)
+            $("#level_two").html('<li class="up"></li>' + htmlStr)
+        })
+
+        // 获取5条新闻
         article.getFiveFocus(function(res) {
             console.log(res);
-            //使用模板引擎：
-            var htmlStr = template('temp_focusList', res);
+            // 使用模板引擎 
+            var htmlStr = template("temp_foucs", res)
             console.log(htmlStr);
-            $('#focus_list').html(htmlStr)
+            $("#focus_list").html(htmlStr)
         })
     </script>
 </body>

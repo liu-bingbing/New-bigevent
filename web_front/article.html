@@ -81,14 +81,14 @@
             <form action="" class="comment_form">
                 <div class="form_group">
                     <label>用户名：</label>
-                    <input type="text" placeholder="请输入用户名" class="comment_name">
+                    <input type="text" placeholder="请输入用户名" class="comment_name" id="comment_name">
                 </div>
                 <div class="form_group">
                     <label>评论内容：</label>
-                    <textarea placeholder="请发表您的评论" class="comment_input"></textarea>
+                    <textarea placeholder="请发表您的评论" class="comment_input" id="comment_content"></textarea>
                 </div>
                 <div class="form_group">
-                    <input type="submit" name="" value="评 论" class="comment_sub"></div>
+                    <input type="button" id="btnAdd" name="" value="评 论" class="comment_sub"></div>
             </form>
 
             <div class="comment_count">
@@ -206,18 +206,46 @@
     <script src="./js/config.js"></script>
     <script src="./js/article.js"></script>
     <script src="./js/category.js"></script>
+    <script src="./js/comment.js"></script>
     <script>
         var id = location.search.substr(4);
         alert(id)
         article.getDetail(id, function(res) {
             console.log(res);
+            var typeId = res.data.type
             $('#article_title').text(res.data.title)
             $('#article_author').text(res.data.author)
             $('#article_date').text(res.data.date)
             $('#article_content').html(res.data.content)
             category.show(function(result) {
                 console.log(result);
+                var rs = result.data.find(function(item) {
+                    if (item.id == typeId) {
+                        return true;
+                    }
+                })
+                if (rs) {
+                    $('#article_type').text(rs.name)
+                }
+            })
+        })
 
+
+        $('#btnAdd').click(function() {
+            var name = $('#comment_name').val().trim();
+            var content = $('#comment_content').val().trim();
+            if (name === '' || content === '') {
+                alert('不能为空')
+                return;
+            }
+            comment.add(name, content, id, function(res) {
+                console.log(res);
+                if (res.code === 200) {
+                    //清空留言；
+                    $('#comment_name').val('')
+                    $('#comment_content').val('')
+                        //再次加载显示留言；
+                }
             })
         })
     </script>
