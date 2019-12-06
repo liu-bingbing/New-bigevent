@@ -255,14 +255,14 @@
 
         function getAndShow() {
             comment.get(id, function(res) {
-                console.log(res.data);
+                console.log(res);
                 res.data.reverse()
                     //对于所有的评论数据，给每一条数添加一个相对时间数据
                     //在模板引擎中使用这个数据；
                 res.data.forEach(function(item) {
                     item.relativeDt = dayjs(item.dt).toNow()
                 });
-                console.log(res.data);
+                // console.log(res.data);
 
                 var htmlStr = template('temp_comment', res);
                 $('#comment_list').html(htmlStr)

@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="css/main.css">
+    <script src="./js/template-web.js"></script>
 </head>
 
 <body>
@@ -243,7 +244,7 @@
     <script src="./js/config.js"></script>
     <script src="./js/category.js"></script>
     <script src="./js/article.js"></script>
-    <script src="./js/template-web.js"></script>
+
     <script>
         // 获取文章类别，并显示
         category.show(function(res) {
@@ -259,7 +260,7 @@
         article.getFiveFocus(function(res) {
             console.log(res);
             // 使用模板引擎 
-            var htmlStr = template("temp_foucs", res)
+            var htmlStr = template("temp_focus", res)
             console.log(htmlStr);
             $("#focus_list").html(htmlStr)
         })
