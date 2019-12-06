@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="css/reset.css">
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
 </head>
 
 <body>
@@ -182,6 +183,8 @@
         <p>电话：0755-****888 粤ICP备*******8号</p>
     </div>
     <script src="./js/jquery-1.12.4.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+    <script src="./js/bootbox.min.js"></script>
     <script src="./js/config.js"></script>
     <script src="./js/article.js"></script>
     <script src="./js/category.js"></script>
@@ -234,7 +237,8 @@
             var name = $('#comment_name').val().trim();
             var content = $('#comment_content').val().trim();
             if (name === '' || content === '') {
-                alert('不能为空')
+                //用bootBox.js来代替alert
+                bootbox.alert('不能为空')
                 return;
             }
             comment.add(name, content, id, function(res) {
@@ -256,7 +260,6 @@
                     //对于所有的评论数据，给每一条数添加一个相对时间数据
                     //在模板引擎中使用这个数据；
                 res.data.forEach(function(item) {
-
                     item.relativeDt = dayjs(item.dt).toNow()
                 });
                 console.log(res.data);
