@@ -95,35 +95,14 @@
                 4条评论
             </div>
 
-            <div class="comment_list_con">
-                <div class="comment_detail_list">
+            <div class="comment_list_con" id="comment_list">
+                <!-- <div class="comment_detail_list">
                     <div class="person_pic fl">乔</div>
                     <div class="name_time fl"><b>虚竹</b><span>4小时前</span></div>
                     <div class="comment_text fl">
                         遏制茅台酒价格过快上涨，多渠道供给，就不一定要买，租茅台酒也可以的，租售同权。开发共有产权茅台酒，让老百姓喝得起茅台酒，饮者有其酒。
                     </div>
-                </div>
-                <div class="comment_detail_list">
-                    <div class="person_pic fl">段</div>
-                    <div class="name_time fl"><b>虚竹</b><span>4小时前</span></div>
-                    <div class="comment_text fl">
-                        遏制茅台酒价格过快上涨，多渠道供给，就不一定要买，租茅台酒也可以的，租售同权。开发共有产权茅台酒，让老百姓喝得起茅台酒，饮者有其酒。
-                    </div>
-                </div>
-                <div class="comment_detail_list">
-                    <div class="person_pic fl">虚</div>
-                    <div class="name_time fl"><b>虚竹</b><span>4小时前</span></div>
-                    <div class="comment_text fl">
-                        遏制茅台酒价格过快上涨，多渠道供给，就不一定要买，租茅台酒也可以的，租售同权。开发共有产权茅台酒，让老百姓喝得起茅台酒，饮者有其酒。
-                    </div>
-                </div>
-                <div class="comment_detail_list">
-                    <div class="person_pic fl">王</div>
-                    <div class="name_time fl"><b>虚竹</b><span>4小时前</span></div>
-                    <div class="comment_text fl">
-                        遏制茅台酒价格过快上涨，多渠道供给，就不一定要买，租茅台酒也可以的，租售同权。开发共有产权茅台酒，让老百姓喝得起茅台酒，饮者有其酒。
-                    </div>
-                </div>
+                </div> -->
             </div>
         </div>
         <div class="right_con setfl">
@@ -207,7 +186,27 @@
     <script src="./js/article.js"></script>
     <script src="./js/category.js"></script>
     <script src="./js/comment.js"></script>
+    <script src="./js/template-web.js"></script>
+    <script src="./js/dayjs.min.js"></script>
+    <script src="./js/relative.min.js"></script>
+    <script src="./js/zh_cn.js"></script>
+    <script id="temp_comment" type="text/html">
+        {{each data item}}
+        <div class="comment_detail_list">
+            <div class="person_pic fl">{{item.name.substr(0,1)}}</div>
+            <div class="name_time fl"><b>{{item.name}}</b><span>{{item.relativeDt}}</span></div>
+            <div class="comment_text fl">
+                {{item.content}}
+            </div>
+        </div>
+        {{/each}}
+    </script>
     <script>
+        //因为引入了relative.min.js;
+        //所以就有了下面的这句话；
+        dayjs.extend(dayjs_plugin_relativeTime)
+            //设置中文：
+        dayjs.locale('zh-cn')
         var id = location.search.substr(4);
         alert(id)
         article.getDetail(id, function(res) {
@@ -245,14 +244,28 @@
                     $('#comment_name').val('')
                     $('#comment_content').val('')
                         //再次加载显示留言；
+                    getAndShow()
                 }
             })
         })
 
-        comment.get(id, function(res) {
-            console.log(res);
+        function getAndShow() {
+            comment.get(id, function(res) {
+                console.log(res.data);
+                res.data.reverse()
+                    //对于所有的评论数据，给每一条数添加一个相对时间数据
+                    //在模板引擎中使用这个数据；
+                res.data.forEach(function(item) {
 
-        })
+                    item.relativeDt = dayjs(item.dt).toNow()
+                });
+                console.log(res.data);
+
+                var htmlStr = template('temp_comment', res);
+                $('#comment_list').html(htmlStr)
+            })
+        }
+        getAndShow()
     </script>
 </body>
 
